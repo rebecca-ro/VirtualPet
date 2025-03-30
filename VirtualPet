@@ -1,0 +1,85 @@
+import time
+
+class VirtualPet:
+    def __init__(self, name):
+        self.name = name
+        self.happiness = 100
+        self.hunger = 100
+        self.cleanliness = 100
+
+    def pet_status(self):
+        # Display the current pet status
+        print(f"\n{name}'s Status:")
+        print(f"Happiness: {self.happiness}/100 {'(._.) Sad' if self.happiness <= 20 else ''}")
+        print(f"Hunger: {self.hunger}/100 {'(>.<) Starving!' if self.hunger <= 20 else ''}")
+        print(f"Cleanliness: {self.cleanliness}/100 {'(^~^) Dirty!' if self.cleanliness <= 20 else ''}")
+
+    def feed_pet(self):
+        # Increase hunger (pet gets full)
+        if self.hunger == 100:
+            print(f"{self.name} is already full! (^-^)")
+            return
+        self.hunger = min(100, self.hunger + 20)
+        print(f"You fed {self.name}! (^-^)")
+
+    def play_with_pet(self):
+        # Increase happiness but decrease hunger
+        if self.hunger <= 10:
+            print(f"{self.name} is too hungry to play! (>.<)")
+            return
+        self.happiness = min(100, self.happiness + 15)
+        self.hunger = max(0, self.hunger - 15)
+        print(f"You played with {self.name}! (◕‿◕)")
+
+    def clean_pet(self):
+        # Increase cleanliness
+        if self.cleanliness == 100:
+            print(f"{self.name} is already clean! (^_^)")
+            return
+        self.cleanliness = min(100, self.cleanliness + 25)
+        print(f"You cleaned {self.name}! (^~^)")
+
+    def check_hunger(self):
+        # Check if the pet is starving (Game Over)
+        if self.hunger == 0:
+            print(f"{self.name} could not survive on their own... (>.<)")
+            exit()
+
+    def pass_time(self):
+        # Simulate time passing and decrease stats
+        self.happiness = max(0, self.happiness - 5)
+        self.hunger = max(0, self.hunger - 10)
+        self.cleanliness = max(0, self.cleanliness - 5)
+
+def main():
+    name = input("What would you like to name your pet? ")
+    pet = VirtualPet(name)
+
+    while True:
+        pet.pet_status()
+        action = input(f"\nWhat would you like to do with {name}? (feed, play, clean, or exit): ").lower()
+
+        if action == "feed":
+            pet.feed_pet()
+        elif action == "play":
+            pet.play_with_pet()
+        elif action == "clean":
+            pet.clean_pet()
+        elif action == "exit":
+            print(f"Goodbye! {name} will miss you!")
+            break
+        else:
+            print("Invalid input. Please choose from 'feed', 'play', 'clean', or 'exit'.")
+            continue
+
+        # Check pet's hunger (Game Over if 0)
+        pet.check_hunger()
+
+        # Simulate time passing
+        pet.pass_time()
+
+        # Small delay to make things more realistic
+        time.sleep(1)
+
+if __name__ == "__main__":
+    main()
